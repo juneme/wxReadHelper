@@ -42,18 +42,6 @@ public class Read {
     }
 
     /**
-     * Initialize environment variables
-     */
-    public void initEnv() {
-        Map<String, String> systemEnvMap = System.getenv();
-        this.wxReaderHeader = JSON.parseObject(systemEnvMap.get(Constant.WX_READ_HEADERS));
-        this.wxReaderData = JSON.parseObject(systemEnvMap.get(Constant.WX_READ_DATA));
-        if (systemEnvMap.containsKey(Constant.READ_NUM)) {
-            this.readNum = Integer.parseInt(systemEnvMap.get(Constant.READ_NUM));
-        }
-    }
-
-    /**
      * URL encode the data
      * @param wxReaderData Data to be encoded
      * @return Encoded string
