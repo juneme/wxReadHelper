@@ -1,8 +1,8 @@
-name: wxReadHelper
+name: wxReadExchange
 
 on:
   schedule:
-    - cron: '0 21 * * *'  # 每天北京时间5点执行
+    - cron: '25 50 13 ? * 7 *'  # 每周日北京时间21点50分执行
   workflow_dispatch:  # 手动触发
 
 jobs:
@@ -25,4 +25,4 @@ jobs:
       - name: Run WxReadHelp
         env:
           WX_READ_USERS: ${{ secrets.WX_READ_USERS }}
-        run: java -cp target/wxReadHelp-0.1.jar cn.ustc.WxReadHelper
+        run: java -cp target/wxReadHelp-0.1.jar cn.ustc.WxReadExchange

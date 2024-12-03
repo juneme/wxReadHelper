@@ -30,6 +30,9 @@
       "ps": "1c532c607a533178g017d46",
       "pc": "59732bf07a533179g014ded"
     },
-    "readNum": 2
+    "readNum": 120,
+    "exchangeAward": "1,1,1,1,1,2,2",
+    "pushType": "",
+    "pushToken": ""
   }
 ]
