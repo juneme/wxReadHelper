@@ -2,7 +2,7 @@ name: wxReadExchange
 
 on:
   schedule:
-    - cron: '25 50 13 ? * 7 *'  # 每周日北京时间21点50分执行
+    - cron: '50 13 * * 0'  # 每周日北京时间21点50分执行
   workflow_dispatch:  # 手动触发
 
 jobs:
