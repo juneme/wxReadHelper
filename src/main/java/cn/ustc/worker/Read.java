@@ -1,5 +1,6 @@
 package cn.ustc.worker;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -9,13 +10,13 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.HttpCookie;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -26,8 +27,7 @@ public class Read {
     private Integer readNum = 2;
     private static final Integer SLEEP_INTERVAL = 30;
     private static final String KEY = "3c5c8717f3daf09iop3423zafeqoi";
-    private static final String REFRESH_BODY = "{\"rq\":\"%2Fweb%2Fbook%2FgetProgress\"}";
-
+    private RefreshToken refreshToken = new RefreshToken();
     public Read() {
     }
 
@@ -81,45 +81,6 @@ public class Read {
         return Long.toHexString(_7032f5 + _cc1055).toLowerCase();
     }
 
-    /**
-     * Refresh the cookie
-     * @return Whether the refresh was successful
-     */
-    private Boolean refreshCookie() {
-        String newWrSkey = this.getWrSkey();
-        if (newWrSkey != null) {
-            wxReaderHeader.replace("Cookie", formatCookie(newWrSkey));
-            log.info("Refresh the token success, the new token：{}", newWrSkey);
-            return true;
-        } else {
-            throw new RuntimeException("Cannot Get the New wr_skey");
-        }
-    }
-
-    /**
-     * Get the new wr_skey
-     * @return New wr_skey
-     */
-    private String getWrSkey() {
-        try {
-            HttpRequest request = HttpRequest.post(Constant.RENEW_URL)
-                    .headerMap(jsonToMap(wxReaderHeader), true)
-                    .body(REFRESH_BODY);
-            HttpResponse response = request.execute();
-            if (JSON.parseObject(response.body()).containsKey("succ")) {
-                List<HttpCookie> cookies = response.getCookies();
-                for (HttpCookie cookie : cookies) {
-                    if ("wr_skey".equals(cookie.getName())) {
-                        return cookie.getValue();
-                    }
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            throw new RuntimeException("Renew the Cookies Error", e);
-        }
-    }
-
     private Map<String, String> jsonToMap(JSONObject wxReaderHeader) {
         Map<String, String> headerMap = new HashMap<>();
         wxReaderHeader.getInnerMap().forEach((key, value) -> {
@@ -165,12 +126,15 @@ public class Read {
                 .execute()) {
             if (response.body() != null) {
                 JSONObject resData = JSON.parseObject(response.body());
+                if (resData.isEmpty()) {
+                    return null;
+                }
                 if (resData.containsKey("succ")) {
                     return true;
                 } else if (-2010 == resData.getInteger("errCode")) {
                     throw new RuntimeException("User does not exist, please check the user information.");
                 } else if (-2012 == resData.getInteger("errCode")) {
-                    return refreshCookie();
+                    return refreshToken.refreshCookie(wxReaderHeader);
                 }
                 return false;
             } else {
@@ -184,29 +148,20 @@ public class Read {
     }
 
     /**
-     * Format the cookie
-     * @param newWrSkey New wr_skey
-     * @return Formatted cookie string
-     */
-    private String formatCookie(String newWrSkey) {
-        return Arrays.stream(wxReaderHeader.getString("Cookie").split(";"))
-                .map(cookie -> cookie.contains("wr_skey") ? " wr_skey=" + newWrSkey : cookie)
-                .collect(Collectors.joining(";"));
-    }
-
-    /**
      * Start reading
      */
     public void startRead() {
-        this.refreshCookie();
-        for (int i = 0; i < readNum; i++) {
-            if (readBook()) {
+        refreshToken.refreshCookie(wxReaderHeader);
+        int failCount = 0;
+        for (int i = 0; i < readNum; ) {
+            Boolean readRes = readBook();
+            if (readRes == null && failCount < 3) {
+                failCount++;
+                ThreadUtil.sleep(SLEEP_INTERVAL + RandomUtil.randomInt(0, 10), TimeUnit.SECONDS);
+            } else if (readRes) {
                 int sleepTime = SLEEP_INTERVAL + RandomUtil.randomInt(0, 10);
-                try {
-                    Thread.sleep(sleepTime * 1000L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException("Error sleeping", e);
-                }
+                ThreadUtil.sleep(sleepTime, TimeUnit.SECONDS);
+                i++;
                 log.info("Read the book successfully, read time: {} seconds", sleepTime);
             } else {
                 throw new RuntimeException("Read the book failed, please check the user information.");

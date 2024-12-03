@@ -22,7 +22,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install | tee build.log
 
-      - name: Run WxReadHelp
+      - name: Run WxReadHelper
         env:
           WX_READ_USERS: ${{ secrets.WX_READ_USERS }}
         run: java -cp target/wxReadHelp-0.1.jar cn.ustc.WxReadHelper

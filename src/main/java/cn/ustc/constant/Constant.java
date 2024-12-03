@@ -8,6 +8,6 @@ public class Constant {
     public static String RENEW_URL = "https://weread.qq.com/web/login/renewal";
     public static String EXCHANGE_URL = "https://i.weread.qq.com/weekly/exchange";
     public static String PLATFORM = "weread_wx-2001-iap-2001-iphone";
-    public static String REFRESH_BODY = "{\"rq\":\"%2Fweb%2Fbook%2FgetProgress\"}";
+    public static String REFRESH_BODY = "{\"rq\":\"%2Fweb%2Fbook%2Fread\"}";
     public static String WX_READ_USERS = "WX_READ_USERS";
 }

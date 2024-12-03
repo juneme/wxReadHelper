@@ -28,7 +28,8 @@ public class RefreshToken {
         this.wxReaderHeader = wxReaderHeader;
         String newWrSkey = getWrSkey();
         if (newWrSkey != null) {
-            wxReaderHeader.replace("Cookie", formatCookie(newWrSkey));
+            String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
+            wxReaderHeader.replace(keyName, formatCookie(newWrSkey, keyName));
             log.info("Refresh the token success, the new token：{}", newWrSkey);
             return true;
         } else {
@@ -50,6 +51,7 @@ public class RefreshToken {
                 List<HttpCookie> cookies = response.getCookies();
                 for (HttpCookie cookie : cookies) {
                     if ("wr_skey".equals(cookie.getName())) {
+                        response.close();
                         return cookie.getValue();
                     }
                 }
@@ -73,8 +75,8 @@ public class RefreshToken {
      * @param newWrSkey New wr_skey
      * @return Formatted cookie string
      */
-    private String formatCookie(String newWrSkey) {
-        return Arrays.stream(wxReaderHeader.getString("Cookie").split(";"))
+    private String formatCookie(String newWrSkey, String keyName) {
+        return Arrays.stream(wxReaderHeader.getString(keyName).split(";"))
                 .map(cookie -> cookie.contains("wr_skey") ? " wr_skey=" + newWrSkey : cookie)
                 .collect(Collectors.joining(";"));
     }

@@ -58,14 +58,14 @@
   }
 ]
 ```
-| Key             | Value           | 说明                  |
-|-----------------|-----------------|---------------------|
-| `wxReaderHeader` | 微信读书Header (必填) | 必须提供有效的header       |
-| `wxReaderData`   | 微信读书Data (必填)   | 必须提供有效的data         |
-| `readMinute`     | 阅读时长 (选填)       | 阅读时长，默认1分钟，单位分钟     |
+| Key              | Value           | 说明                   |
+|------------------|-----------------|----------------------|
+| `wxReaderHeader` | 微信读书Header (必填) | 必须提供有效的header        |
+| `wxReaderData`   | 微信读书Data (必填)   | 必须提供有效的data          |
+| `readMinute`     | 阅读时长 (选填)       | 阅读时长，默认1分钟，单位分钟      |
 | `exchangeAward`  | 兑换奖励 (选填)       | 兑换奖励，默认0,0,0,0,0,0,0 |
-| `pushType`       | 推送类型 (选填)       | 推送类型，默认不推送          |
-| `pushToken`      | 推送Token (选填)      | 推送Token，默认不推送       |
+| `pushType`       | 推送类型 (选填)       | 推送类型，默认不推送           |
+| `pushToken`      | 推送Token (选填)    | 推送Token，默认不推送        |
 `exchangeAward`为每周日晚上根据阅读时长兑换对应的阅读奖励，共7个奖励，其中0表示不兑换，1表示兑换为体验卡，2表示为兑换为书币，如：`1,1,1,1,1,2,2`表示前5个奖励兑换体验卡，第6、7个奖励兑换为书币。
 #### 1.2 抓包获取用户数据
 在微信阅读官网 [微信读书 (qq.com)](https://weread.qq.com/) 搜索任意一本或自己喜欢的书籍点开阅读点击下一页进行抓包，抓到`read`接口 `https://weread.qq.com/web/book/read` 如果返回格式正常（如：
@@ -76,7 +76,7 @@
 }
 ```
 右键复制为Bash格式，然后在 [Convert curl commands to JSON (curlconverter.com)](https://curlconverter.com/json/) 转化为Json之后，复制需要的headers与data字段替换JSON字符串中wxReaderHeader和wxReaderData，根据自己需要配置其它字段，获得可执行的用户JSON字符串。
-
+[!image](./.picture/1.png)
 ### 2. 部署运行
 #### 2.1 GitHub Action部署运行（GitHub运行）
 

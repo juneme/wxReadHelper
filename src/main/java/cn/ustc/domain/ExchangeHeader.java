@@ -26,7 +26,8 @@ public class ExchangeHeader {
     }
 
     public ExchangeHeader(JSONObject wxReaderHeader) {
-        String[] splitCookies = wxReaderHeader.getString("Cookie").split(";");
+        String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
+        String[] splitCookies = wxReaderHeader.getString(keyName).split(";");
         Arrays.stream(splitCookies).forEach(cookie -> {
             cookie = cookie.trim();
             if (cookie.startsWith("wr_vid")) {
