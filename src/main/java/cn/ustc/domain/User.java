@@ -14,7 +14,7 @@ public class User {
     private JSONObject wxReaderHeader;
     private JSONObject wxReaderCookie;
     private JSONObject wxReaderData;
-    private Integer readNum;
+    private Integer readMinute;
     private String exchangeAward;
     private String pushType;
     private String pushToken;
@@ -54,12 +54,12 @@ public class User {
         this.wxReaderData = wxReaderData;
     }
 
-    public Integer getReadNum() {
-        return readNum;
+    public Integer getReadMinute() {
+        return readMinute;
     }
 
-    public void setReadNum(Integer readNum) {
-        this.readNum = readNum;
+    public void setReadMinute(Integer readMinute) {
+        this.readMinute = readMinute;
     }
 
     public String getExchangeAward() {
