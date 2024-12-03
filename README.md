@@ -76,7 +76,9 @@
 }
 ```
 右键复制为Bash格式，然后在 [Convert curl commands to JSON (curlconverter.com)](https://curlconverter.com/json/) 转化为Json之后，复制需要的headers与data字段替换JSON字符串中wxReaderHeader和wxReaderData，根据自己需要配置其它字段，获得可执行的用户JSON字符串。
-[!image](./.picture/1.png)
+![抓包图片](./.picture/1.png)
+![抓包图片](./.picture/2.png)
+
 ### 2. 部署运行
 #### 2.1 GitHub Action部署运行（GitHub运行）
 
