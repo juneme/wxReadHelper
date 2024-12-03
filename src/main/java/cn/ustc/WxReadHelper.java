@@ -14,7 +14,7 @@ public class WxReadHelper {
         List<User> users = User.init(userJsonPath);
         ExecutorService executorService = Executors.newFixedThreadPool(users.size());
         for (User user : users) {
-            executorService.submit(() -> new Read(user.getWxReaderData(), user.getWxReaderHeader(), user.getReadNum()).startRead());
+            executorService.submit(() -> new Read(user.getWxReaderData(), user.getWxReaderHeader(), user.getReadMinute()).startRead());
         }
         executorService.shutdown();
     }

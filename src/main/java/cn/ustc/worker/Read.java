@@ -31,14 +31,14 @@ public class Read {
     public Read() {
     }
 
-    public Read(JSONObject wxReaderData, JSONObject wxReaderHeader, Integer readNum) {
+    public Read(JSONObject wxReaderData, JSONObject wxReaderHeader, Integer readMinute) {
         this.wxReaderData = wxReaderData;
         this.wxReaderHeader = wxReaderHeader;
-        this.readNum = readNum;
+        this.readNum = readMinute * 2;
     }
 
     public Read(JSONObject wxReaderData, JSONObject wxReaderHeader) {
-        this(wxReaderData, wxReaderHeader, 2);
+        this(wxReaderData, wxReaderHeader, 1);
     }
 
     /**
