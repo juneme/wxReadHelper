@@ -1,4 +1,4 @@
-package cn.ustc.constant;
+package cn.wxreader.constant;
 
 
 public class Constant {

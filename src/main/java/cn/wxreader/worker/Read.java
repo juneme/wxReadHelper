@@ -1,10 +1,10 @@
-package cn.ustc.worker;
+package cn.wxreader.worker;
 
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import cn.ustc.constant.Constant;
+import cn.wxreader.constant.Constant;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;

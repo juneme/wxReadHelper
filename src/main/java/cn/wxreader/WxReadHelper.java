@@ -1,8 +1,8 @@
-package cn.ustc;
+package cn.wxreader;
 
-import cn.ustc.constant.Constant;
-import cn.ustc.domain.User;
-import cn.ustc.worker.Read;
+import cn.wxreader.constant.Constant;
+import cn.wxreader.domain.User;
+import cn.wxreader.worker.Read;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

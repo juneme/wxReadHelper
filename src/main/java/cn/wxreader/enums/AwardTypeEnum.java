@@ -1,4 +1,4 @@
-package cn.ustc.enums;
+package cn.wxreader.enums;
 
 public enum AwardTypeEnum {
     NONE(0,"无"),

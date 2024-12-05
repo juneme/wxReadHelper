@@ -1,10 +1,10 @@
-package cn.ustc.worker;
+package cn.wxreader.worker;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import cn.ustc.constant.Constant;
-import cn.ustc.domain.*;
-import cn.ustc.enums.AwardTypeEnum;
+import cn.wxreader.constant.Constant;
+import cn.wxreader.domain.*;
+import cn.wxreader.enums.AwardTypeEnum;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

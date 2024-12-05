@@ -1,4 +1,4 @@
-package cn.ustc.domain;
+package cn.wxreader.domain;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package cn.ustc.domain;
+package cn.wxreader.domain;
 
-import cn.ustc.constant.Constant;
+import cn.wxreader.constant.Constant;
 
 public class ExchangeAwardReq {
     private Integer awardLevelId;

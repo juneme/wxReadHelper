@@ -1,6 +1,6 @@
-package cn.ustc.domain;
+package cn.wxreader.domain;
 
-import cn.ustc.constant.Constant;
+import cn.wxreader.constant.Constant;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
