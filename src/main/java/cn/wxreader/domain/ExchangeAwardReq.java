@@ -12,13 +12,13 @@ public class ExchangeAwardReq {
         this.awardLevelId = awardLevelId;
         this.awardChoiceType = awardChoiceType;
         this.isExchangeAward = isExchangeAward;
-        this.pf = Constant.PLATFORM;
+        this.pf = Constant.Android_PLATFORM;
     }
 
     public ExchangeAwardReq() {
     }
 
-    public static ExchangeAwardReq init() {
+    public static ExchangeAwardReq init(String platForm) {
         return new ExchangeAwardReq(0,0,0);
     }
 

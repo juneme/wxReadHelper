@@ -47,7 +47,8 @@ public class RefreshToken {
                     .headerMap(jsonToMap(wxReaderHeader), true)
                     .body(Constant.REFRESH_BODY);
             HttpResponse response = request.execute();
-            if (JSON.parseObject(response.body()).containsKey("succ")) {
+            JSONObject resData = JSON.parseObject(response.body());
+            if (resData.containsKey("succ")) {
                 List<HttpCookie> cookies = response.getCookies();
                 for (HttpCookie cookie : cookies) {
                     if ("wr_skey".equals(cookie.getName())) {
@@ -55,6 +56,8 @@ public class RefreshToken {
                         return cookie.getValue();
                     }
                 }
+            } else {
+                throw new RuntimeException(String.format("Renew the Cookies Error, errCode: %s, errMsg: %s", resData.getInteger("errCode"), resData.getString("errMsg")));
             }
             return null;
         } catch (Exception e) {

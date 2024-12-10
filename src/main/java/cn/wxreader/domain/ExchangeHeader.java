@@ -19,13 +19,7 @@ public class ExchangeHeader {
     public ExchangeHeader() {
     }
 
-    public ExchangeHeader(String vid, String sKey) {
-        this.vid = vid;
-        this.sKey = sKey;
-        this.userAgent = Constant.UserAgentForApp;
-    }
-
-    public ExchangeHeader(JSONObject wxReaderHeader) {
+    public ExchangeHeader(JSONObject wxReaderHeader, String userAgent) {
         String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
         String[] splitCookies = wxReaderHeader.getString(keyName).split(";");
         Arrays.stream(splitCookies).forEach(cookie -> {
@@ -36,7 +30,7 @@ public class ExchangeHeader {
                 this.sKey = cookie.split("=")[1];
             }
         });
-        this.userAgent = Constant.UserAgentForApp;
+        this.userAgent = userAgent;
     }
 
     public Map<String, String> toMap() {

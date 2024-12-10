@@ -18,11 +18,16 @@ public class Exchange {
     private ExchangeHeader exchangeHeader;
     private Map<Integer, Integer> idAndExchangeMap = new HashMap<>();
     private JSONObject wxReaderHeader;
+    private String platForm;
+    private String userAgent;
+
     public static final List<Integer> AWARD_LEVEL_IDS = Arrays.asList(4, 1, 2, 3, 11, 12, 13);
 
-    public Exchange(JSONObject wxReaderHeader, String exchangeAward) {
-        this.wxReaderHeader = wxReaderHeader;
-        initializeExchangeMap(exchangeAward);
+    public Exchange(User user) {
+        this.wxReaderHeader = user.getWxReaderHeader();
+        this.platForm = user.getPlatForm();
+        this.userAgent = user.getUserAgent();
+        initializeExchangeMap(user.getExchangeAward());
     }
 
     private void initializeExchangeMap(String exchangeAward) {
@@ -39,7 +44,7 @@ public class Exchange {
     public void exchange() {
         RefreshToken refreshToken = new RefreshToken();
         if (refreshToken.refreshCookie(wxReaderHeader)) {
-            this.exchangeHeader = new ExchangeHeader(wxReaderHeader);
+            this.exchangeHeader = new ExchangeHeader(wxReaderHeader, userAgent);
             ExchangeAwardRes awardRes = sendExchange(null);
             List<ReadAward> toExchangeAwards = getToExchangeAwards(awardRes);
             Map<Integer, Integer> rewardMap = new HashMap<>(2);
@@ -94,7 +99,7 @@ public class Exchange {
 
     private ExchangeAwardRes sendExchange(ExchangeAwardReq req) {
         if (req == null) {
-            req = ExchangeAwardReq.init();
+            req = ExchangeAwardReq.init(platForm);
         }
         HttpResponse response = HttpRequest.post(Constant.EXCHANGE_URL)
                 .headerMap(exchangeHeader.toMap(), true)

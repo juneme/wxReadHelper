@@ -16,6 +16,8 @@ public class User {
     private JSONObject wxReaderData;
     private Integer readMinute;
     private String exchangeAward;
+    private String platForm;
+    private String userAgent;
     private String pushType;
     private String pushToken;
 
@@ -68,5 +70,46 @@ public class User {
 
     public void setExchangeAward(String exchangeAward) {
         this.exchangeAward = exchangeAward;
+    }
+
+    public String getPlatForm() {
+        return platForm;
+    }
+
+    public void setPlatForm(String platForm) {
+        if (platForm == null){
+            this.platForm = Constant.Android_PLATFORM;
+            this.userAgent = Constant.UserAgentForAndroid;
+        } else if ("IOS".equals(platForm.toUpperCase())){
+            this.platForm = Constant.IOS_PLATFORM;
+            this.userAgent = Constant.UserAgentForIOS;
+        } else {
+            this.platForm = Constant.Android_PLATFORM;
+            this.userAgent = Constant.UserAgentForAndroid;
+        }
+    }
+
+    public String getPushType() {
+        return pushType;
+    }
+
+    public void setPushType(String pushType) {
+        this.pushType = pushType;
+    }
+
+    public String getPushToken() {
+        return pushToken;
+    }
+
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
     }
 }
