@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.wxreader.constant.Constant;
+import cn.wxreader.domain.User;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
@@ -24,21 +25,19 @@ public class Read {
     private static final Logger log = LoggerFactory.getLogger(Read.class);
     private JSONObject wxReaderData;
     private JSONObject wxReaderHeader;
-    private Integer readNum = 2;
+    private Integer readNum;
+    private String wrName;
     private static final Integer SLEEP_INTERVAL = 30;
     private static final String KEY = "3c5c8717f3daf09iop3423zafeqoi";
     private RefreshToken refreshToken = new RefreshToken();
     public Read() {
     }
 
-    public Read(JSONObject wxReaderData, JSONObject wxReaderHeader, Integer readMinute) {
-        this.wxReaderData = wxReaderData;
-        this.wxReaderHeader = wxReaderHeader;
-        this.readNum = readMinute * 2;
-    }
-
-    public Read(JSONObject wxReaderData, JSONObject wxReaderHeader) {
-        this(wxReaderData, wxReaderHeader, 1);
+    public Read(User user) {
+        this.wxReaderData = user.getWxReaderData();
+        this.wxReaderHeader = user.getWxReaderHeader();
+        this.readNum = user.getReadMinute() * 2;
+        this.wrName = user.getWrName();
     }
 
     /**
@@ -162,7 +161,7 @@ public class Read {
                 int sleepTime = SLEEP_INTERVAL + RandomUtil.randomInt(0, 10);
                 ThreadUtil.sleep(sleepTime, TimeUnit.SECONDS);
                 i++;
-                log.info("Read the book successfully, read time: {} seconds", sleepTime);
+                log.info("{}：Read the book successfully, read time: {} seconds", wrName, sleepTime);
             } else {
                 throw new RuntimeException("Read the book failed, please check the user information.");
             }

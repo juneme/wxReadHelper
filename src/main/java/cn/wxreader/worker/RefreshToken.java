@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.HttpCookie;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +21,20 @@ public class RefreshToken {
 
     private JSONObject wxReaderHeader;
 
+    private String wrName;
+
     /**
      * Refresh the cookie
      * @return Whether the refresh was successful
      */
     public Boolean refreshCookie(JSONObject wxReaderHeader) {
         this.wxReaderHeader = wxReaderHeader;
+        this.wrName = getWrName();
         String newWrSkey = getWrSkey();
         if (newWrSkey != null) {
             String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
             wxReaderHeader.replace(keyName, formatCookie(newWrSkey, keyName));
-            log.info("Refresh the token success, the new token：{}", newWrSkey);
+            log.info("{}：Refresh the token success, the new token：{}", wrName, newWrSkey);
             return true;
         } else {
             throw new RuntimeException("Cannot Get the New wr_skey");
@@ -82,5 +86,14 @@ public class RefreshToken {
         return Arrays.stream(wxReaderHeader.getString(keyName).split(";"))
                 .map(cookie -> cookie.contains("wr_skey") ? " wr_skey=" + newWrSkey : cookie)
                 .collect(Collectors.joining(";"));
+    }
+
+    private String getWrName() {
+        String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
+        String wrName = Arrays.stream(wxReaderHeader.getString(keyName).split(";"))
+                .filter(s -> s.contains("wr_name"))
+                .collect(Collectors.toList())
+                .get(0).split("=")[1];
+        return URLDecoder.decode(wrName);
     }
 }

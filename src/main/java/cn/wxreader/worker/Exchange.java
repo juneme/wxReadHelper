@@ -18,6 +18,8 @@ public class Exchange {
     private ExchangeHeader exchangeHeader;
     private Map<Integer, Integer> idAndExchangeMap = new HashMap<>();
     private JSONObject wxReaderHeader;
+
+    private String wrName;
     private String platForm;
     private String userAgent;
 
@@ -27,6 +29,7 @@ public class Exchange {
         this.wxReaderHeader = user.getWxReaderHeader();
         this.platForm = user.getPlatForm();
         this.userAgent = user.getUserAgent();
+        this.wrName = user.getWrName();
         initializeExchangeMap(user.getExchangeAward());
     }
 
@@ -72,7 +75,7 @@ public class Exchange {
                 .findFirst()
                 .orElse(null);
         if (awardChoice == null || awardChoice.getCanChoice() != 1) {
-            log.info("{}选择兑换{}失败，此奖励不可兑换", toExchange.getAwardLevelDesc(), awardType.getDesc());
+            log.info("{}：{}选择兑换{}失败，此奖励不可兑换", wrName, toExchange.getAwardLevelDesc(), awardType.getDesc());
             return;
         }
         ExchangeAwardReq req = new ExchangeAwardReq(awardLevelId, awardType.getCode(), 1);
@@ -87,14 +90,14 @@ public class Exchange {
                 .orElse(null);
         if (exchangeResult != null && exchangeResult.getAwardStatus() == 2) {
             rewardMap.put(awardType.getCode(), rewardMap.getOrDefault(awardType.getCode(), 0) + awardChoice.getAwardNum());
-            log.info("时长兑福利{}兑换成功，此次选择兑换：{}，数量：{}", exchangeResult.getAwardLevelDesc(), awardType.getDesc(), awardChoice.getAwardNum());
+            log.info("{}：时长兑福利{}兑换成功，此次选择兑换：{}，数量：{}", wrName, exchangeResult.getAwardLevelDesc(), awardType.getDesc(), awardChoice.getAwardNum());
         }
     }
 
     private void logExchangeSummary(ExchangeAwardRes awardRes, Map<Integer, Integer> rewardMap) {
         int card = rewardMap.getOrDefault(AwardTypeEnum.CARD.getCode(), 0);
         int coin = rewardMap.getOrDefault(AwardTypeEnum.COIN.getCode(), 0);
-        log.info("本周总计阅读{}天，共{}分钟，此次兑换{}天体验卡，{}个书币", awardRes.getReadingDay(), awardRes.getReadingTime(), card, coin);
+        log.info("{}：本周总计阅读{}天，共{}分钟，此次兑换{}天体验卡，{}个书币", wrName, awardRes.getReadingDay(), awardRes.getReadingTime(), card, coin);
     }
 
     private ExchangeAwardRes sendExchange(ExchangeAwardReq req) {

@@ -5,16 +5,19 @@ import cn.wxreader.constant.Constant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class User {
     private JSONObject wxReaderHeader;
     private JSONObject wxReaderCookie;
     private JSONObject wxReaderData;
-    private Integer readMinute;
+    private Integer readMinute = 1;
     private String exchangeAward;
     private String platForm;
     private String userAgent;
@@ -111,5 +114,14 @@ public class User {
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+    }
+
+    public String getWrName() {
+        String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
+        String wrName = Arrays.stream(wxReaderHeader.getString(keyName).split(";"))
+                .filter(s -> s.contains("wr_name"))
+                .collect(Collectors.toList())
+                .get(0).split("=")[1];
+        return URLDecoder.decode(wrName);
     }
 }
