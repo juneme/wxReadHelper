@@ -25,4 +25,4 @@ jobs:
       - name: Run WxReadExchange
         env:
           WX_READ_USERS: ${{ secrets.WX_READ_USERS }}
-        run: java -cp target/wxReadHelp-1.0.jar cn.wxreader.WxReadExchange
+        run: java -cp target/wxReadHelp-1.1.jar cn.wxreader.WxReadExchange
