@@ -3,6 +3,7 @@ package cn.wxreader;
 import cn.wxreader.constant.Constant;
 import cn.wxreader.domain.User;
 import cn.wxreader.worker.Exchange;
+import cn.wxreader.worker.Push;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,8 @@ public class WxReadExchange {
         for (User user : users) {
             executorService.submit(() -> {
                 try {
-                    new Exchange(user).exchange();
+                    String exchangeRes = new Exchange(user).exchange();
+                    new Push(user, exchangeRes).push();
                 } catch (Exception e) {
                     log.error("Error reading for user: {}", user, e);
                 }

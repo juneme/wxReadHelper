@@ -149,7 +149,7 @@ public class Read {
     /**
      * Start reading
      */
-    public void startRead() {
+    public String startRead() {
         refreshToken.refreshCookie(wxReaderHeader);
         int failCount = 0;
         for (int i = 0; i < readNum; ) {
@@ -166,5 +166,6 @@ public class Read {
                 throw new RuntimeException("Read the book failed, please check the user information.");
             }
         }
+        return String.format("%s：今日阅读已完成，本次阅读 %d 分钟", wrName, readNum / 2);
     }
 }

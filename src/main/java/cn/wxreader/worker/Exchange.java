@@ -44,7 +44,7 @@ public class Exchange {
         }
     }
 
-    public void exchange() {
+    public String exchange() {
         RefreshToken refreshToken = new RefreshToken();
         if (refreshToken.refreshCookie(wxReaderHeader)) {
             this.exchangeHeader = new ExchangeHeader(wxReaderHeader, userAgent);
@@ -54,8 +54,9 @@ public class Exchange {
             for (ReadAward toExchange : toExchangeAwards) {
                 exchangeAward(toExchange, rewardMap);
             }
-            logExchangeSummary(awardRes, rewardMap);
+            return logExchangeSummary(awardRes, rewardMap);
         }
+        return null;
     }
 
     private List<ReadAward> getToExchangeAwards(ExchangeAwardRes awardRes) {
@@ -94,10 +95,12 @@ public class Exchange {
         }
     }
 
-    private void logExchangeSummary(ExchangeAwardRes awardRes, Map<Integer, Integer> rewardMap) {
+    private String logExchangeSummary(ExchangeAwardRes awardRes, Map<Integer, Integer> rewardMap) {
         int card = rewardMap.getOrDefault(AwardTypeEnum.CARD.getCode(), 0);
         int coin = rewardMap.getOrDefault(AwardTypeEnum.COIN.getCode(), 0);
-        log.info("{}：本周总计阅读{}天，共{}分钟，此次兑换{}天体验卡，{}个书币", wrName, awardRes.getReadingDay(), awardRes.getReadingTime(), card, coin);
+        String logInfo = String.format("%s：本周总计阅读%d天，共%d分钟，此次兑换%d天体验卡，%d个书币", wrName, awardRes.getReadingDay(), awardRes.getReadingTime(), card, coin);
+        log.info(logInfo);
+        return logInfo;
     }
 
     private ExchangeAwardRes sendExchange(ExchangeAwardReq req) {
