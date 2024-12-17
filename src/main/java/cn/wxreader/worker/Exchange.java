@@ -67,7 +67,7 @@ public class Exchange {
 
     private void exchangeAward(ReadAward toExchange, Map<Integer, Integer> rewardMap) {
         Integer awardLevelId = toExchange.getAwardLevelId();
-        AwardTypeEnum awardType = AwardTypeEnum.getAwardTypeEnum(idAndExchangeMap.get(awardLevelId));
+        AwardTypeEnum awardType = AwardTypeEnum.findByCode(idAndExchangeMap.get(awardLevelId));
         if (awardType == AwardTypeEnum.NONE) {
             return;
         }

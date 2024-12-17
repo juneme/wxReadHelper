@@ -20,7 +20,7 @@ public enum AwardTypeEnum {
         return desc;
     }
 
-    public static AwardTypeEnum getAwardTypeEnum(Integer code) {
+    public static AwardTypeEnum findByCode(Integer code) {
         for (AwardTypeEnum awardTypeEnum : AwardTypeEnum.values()) {
             if (awardTypeEnum.getCode().equals(code)) {
                 return awardTypeEnum;
