@@ -52,7 +52,7 @@ public class RefreshToken {
                     .body(Constant.REFRESH_BODY);
             HttpResponse response = request.execute();
             JSONObject resData = JSON.parseObject(response.body());
-            if (resData.containsKey("succ")) {
+            if (resData.containsKey("succ") || resData.getInteger("errCode") == -12013) {
                 List<HttpCookie> cookies = response.getCookies();
                 for (HttpCookie cookie : cookies) {
                     if ("wr_skey".equals(cookie.getName())) {
