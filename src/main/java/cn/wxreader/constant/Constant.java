@@ -4,7 +4,7 @@ package cn.wxreader.constant;
 public class Constant {
     public static String DEFAULT_USER_JSON_PATH = "src/main/resources/user.json";
     public static String UserAgentForIOS = "WeRead/7.4.2 (iPhone; iOS 17.1; Scale/3.00)";
-    public static String UserAgentForAndroid = "WeRead/8.4.0 WRBrand/other Dalvik/2.1.0 (Linux; U; Android 15; RMX3888 Build/UKQ1.231108.001)";
+    public static String UserAgentForAndroid = "WeRead/9.0.0 WRBrand/realme Dalvik/2.1.0 (Linux; U; Android 15; RMX3888 Build/UKQ1.231108.001)";
     public static String READ_URL = "https://weread.qq.com/web/book/read";
     public static String RENEW_URL = "https://weread.qq.com/web/login/renewal";
     public static String EXCHANGE_URL = "https://i.weread.qq.com/weekly/exchange";

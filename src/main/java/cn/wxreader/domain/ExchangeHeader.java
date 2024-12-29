@@ -1,6 +1,5 @@
 package cn.wxreader.domain;
 
-import cn.wxreader.constant.Constant;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -15,6 +14,8 @@ public class ExchangeHeader {
     private String sKey;
     @JSONField(name = "User-Agent")
     private String userAgent;
+    private String appver = "9.0.0.10165035";
+
 
     public ExchangeHeader() {
     }
@@ -38,6 +39,7 @@ public class ExchangeHeader {
         res.put("vid", vid);
         res.put("skey", sKey);
         res.put("User-Agent", userAgent);
+        res.put("appver", appver);
         return res;
     }
 
