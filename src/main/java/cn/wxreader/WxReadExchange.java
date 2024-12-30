@@ -2,6 +2,7 @@ package cn.wxreader;
 
 import cn.wxreader.constant.Constant;
 import cn.wxreader.domain.User;
+import cn.wxreader.enums.WxTaskEnum;
 import cn.wxreader.worker.Exchange;
 import cn.wxreader.worker.Push;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class WxReadExchange {
             executorService.submit(() -> {
                 try {
                     String exchangeRes = new Exchange(user).exchange();
-                    new Push(user, exchangeRes).push();
+                    new Push(user, exchangeRes).push(WxTaskEnum.EXCHANGE);
                 } catch (Exception e) {
                     log.error("Error reading for user: {}", user, e);
                 }

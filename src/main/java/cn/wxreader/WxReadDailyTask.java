@@ -2,6 +2,7 @@ package cn.wxreader;
 
 import cn.wxreader.constant.Constant;
 import cn.wxreader.domain.User;
+import cn.wxreader.enums.WxTaskEnum;
 import cn.wxreader.worker.DailyTask;
 import cn.wxreader.worker.Push;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class WxReadDailyTask {
             executorService.submit(() -> {
                 try {
                     String dailyTaskMsg = new DailyTask(user).dailyTask();
-                    new Push(user, dailyTaskMsg).push();
+                    new Push(user, dailyTaskMsg).push(WxTaskEnum.DAILY_TASK);
                 } catch (Exception e) {
                     log.error("Exception in thread for user: {}", user, e);
                 }

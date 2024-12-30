@@ -2,6 +2,7 @@ package cn.wxreader.worker;
 
 import cn.wxreader.domain.User;
 import cn.wxreader.enums.PushTypeEnum;
+import cn.wxreader.enums.WxTaskEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ public class Push {
         this.wrName = user.getWrName();
     }
 
-    public void push() {
+    public void push(WxTaskEnum task) {
         if (pushType == null || pushToken.isEmpty()){
             return;
         }
@@ -32,9 +33,9 @@ public class Push {
                 break;
         }
         if (pushRes) {
-            log.info("{}：已通过 {} 推送今日阅读或兑换结果。", wrName, pushType.getDesc());
+            log.info("{}：已通过 {} 推送今日【{}】结果。", wrName, pushType.getDesc(), task.getDesc());
         } else {
-            log.error("{}：通过 {} 推送今日阅读或兑换结果失败。", wrName, pushType.getDesc());
+            log.error("{}：通过 {} 推送今日【{}】结果失败。", wrName, pushType.getDesc(), task.getDesc());
         }
     }
 }

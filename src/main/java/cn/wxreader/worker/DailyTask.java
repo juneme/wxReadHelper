@@ -52,7 +52,7 @@ public class DailyTask {
         List<Rank> unLikedFriends = friendRankList.stream().filter(f -> f.getIsLiked() == 0).collect(Collectors.toList());
         Rank toLikeFriend = unLikedFriends.isEmpty() ? friendRankList.get(0) : unLikedFriends.get(0);
         if (toLikeFriend.getIsLiked() == 1) {
-            log.info("【每日任务】{}: 已对好友 {} 进行过点赞，将取消后重新点赞", wrName, toLikeFriend.getUser().getName());
+            log.info("【每日任务】{}: 已对好友【{}】进行过点赞，将取消后重新点赞", wrName, toLikeFriend.getUser().getName());
             if (!sendLike(new FriendLikeReq(0, 0, toLikeFriend.getUser().getUserVid()))) {
                 return null;
             }
@@ -60,7 +60,7 @@ public class DailyTask {
         if (!sendLike(new FriendLikeReq(1, 0, toLikeFriend.getUser().getUserVid()))) {
             return null;
         }
-        log.info("【每日任务】{}: 已完成对好友 {} 阅读记录的点赞", wrName, toLikeFriend.getUser().getName());
+        log.info("【每日任务】{}: 已完成对好友【{}】阅读记录的点赞", wrName, toLikeFriend.getUser().getName());
         return toLikeFriend.getUser().getName();
     }
 
