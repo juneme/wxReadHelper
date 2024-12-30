@@ -7,20 +7,24 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExchangeHeader {
+public class AndroidHeader {
     @JSONField(name = "vid")
     private String vid;
     @JSONField(name = "skey")
     private String sKey;
     @JSONField(name = "User-Agent")
     private String userAgent;
+    private String baseapi = "35";
     private String appver = "9.0.0.10165035";
+    private String osver = "15";
+    private String channelId = "0";
+    private String basever = "9.0.0.10165034";
 
 
-    public ExchangeHeader() {
+    public AndroidHeader() {
     }
 
-    public ExchangeHeader(JSONObject wxReaderHeader, String userAgent) {
+    public AndroidHeader(JSONObject wxReaderHeader, String userAgent) {
         String keyName = wxReaderHeader.keySet().stream().filter(key -> key.toLowerCase().contains("cookie")).findFirst().orElse(null);
         String[] splitCookies = wxReaderHeader.getString(keyName).split(";");
         Arrays.stream(splitCookies).forEach(cookie -> {
@@ -40,30 +44,10 @@ public class ExchangeHeader {
         res.put("skey", sKey);
         res.put("User-Agent", userAgent);
         res.put("appver", appver);
+        res.put("osver", osver);
+        res.put("channelId", channelId);
+        res.put("basever", basever);
+        res.put("baseapi", baseapi);
         return res;
-    }
-
-    public String getVid() {
-        return vid;
-    }
-
-    public void setVid(String vid) {
-        this.vid = vid;
-    }
-
-    public String getsKey() {
-        return sKey;
-    }
-
-    public void setsKey(String sKey) {
-        this.sKey = sKey;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
-    }
-
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
     }
 }

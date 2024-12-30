@@ -131,7 +131,7 @@ public class Read {
                 if (resData.containsKey("succ")) {
                     return true;
                 } else if (-2010 == resData.getInteger("errCode")) {
-                    throw new RuntimeException("User does not exist, please check the user information.");
+                    throw new RuntimeException("用户不存在，请检查读者信息是否正确。");
                 } else if (-2012 == resData.getInteger("errCode")) {
                     return refreshToken.refreshCookie(wxReaderHeader);
                 }
@@ -161,11 +161,11 @@ public class Read {
                 int sleepTime = SLEEP_INTERVAL + RandomUtil.randomInt(0, 10);
                 ThreadUtil.sleep(sleepTime, TimeUnit.SECONDS);
                 i++;
-                log.info("{}：Read the book successfully, read time: {} seconds", wrName, sleepTime);
+                log.info("【自动阅读】{}：阅读成功, 本次阅读时长 {} 秒", wrName, sleepTime);
             } else {
-                throw new RuntimeException("Read the book failed, please check the user information.");
+                throw new RuntimeException("【自动阅读】阅读失败，请检查读者信息是否正确。");
             }
         }
-        return String.format("%s：今日阅读已完成，本次阅读 %d 分钟", wrName, readNum / 2);
+        return String.format("【自动阅读】%s：今日阅读已完成，本次阅读 %d 分钟", wrName, readNum / 2);
     }
 }

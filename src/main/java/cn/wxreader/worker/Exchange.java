@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class Exchange {
     private static final Logger log = LoggerFactory.getLogger(Exchange.class);
-    private ExchangeHeader exchangeHeader;
+    private AndroidHeader androidHeader;
     private Map<Integer, Integer> idAndExchangeMap = new HashMap<>();
     private JSONObject wxReaderHeader;
 
@@ -47,7 +47,7 @@ public class Exchange {
     public String exchange() {
         RefreshToken refreshToken = new RefreshToken();
         if (refreshToken.refreshCookie(wxReaderHeader)) {
-            this.exchangeHeader = new ExchangeHeader(wxReaderHeader, userAgent);
+            this.androidHeader = new AndroidHeader(wxReaderHeader, userAgent);
             ExchangeAwardRes awardRes = sendExchange(null);
             List<ReadAward> toExchangeAwards = getToExchangeAwards(awardRes);
             Map<Integer, Integer> rewardMap = new HashMap<>(2);
@@ -76,7 +76,7 @@ public class Exchange {
                 .findFirst()
                 .orElse(null);
         if (awardChoice == null || awardChoice.getCanChoice() != 1) {
-            log.info("{}：{}选择兑换{}失败，此奖励不可兑换", wrName, toExchange.getAwardLevelDesc(), awardType.getDesc());
+            log.info("【时长兑福利】{}：{}选择兑换{}失败，此奖励不可兑换", wrName, toExchange.getAwardLevelDesc(), awardType.getDesc());
             return;
         }
         ExchangeAwardReq req = new ExchangeAwardReq(awardLevelId, awardType.getCode(), 1);
@@ -91,14 +91,14 @@ public class Exchange {
                 .orElse(null);
         if (exchangeResult != null && exchangeResult.getAwardStatus() == 2) {
             rewardMap.put(awardType.getCode(), rewardMap.getOrDefault(awardType.getCode(), 0) + awardChoice.getAwardNum());
-            log.info("{}：时长兑福利{}兑换成功，此次选择兑换：{}，数量：{}", wrName, exchangeResult.getAwardLevelDesc(), awardType.getDesc(), awardChoice.getAwardNum());
+            log.info("【时长兑福利】{}：时长兑福利{}兑换成功，此次选择兑换：{}，数量：{}", wrName, exchangeResult.getAwardLevelDesc(), awardType.getDesc(), awardChoice.getAwardNum());
         }
     }
 
     private String logExchangeSummary(ExchangeAwardRes awardRes, Map<Integer, Integer> rewardMap) {
         int card = rewardMap.getOrDefault(AwardTypeEnum.CARD.getCode(), 0);
         int coin = rewardMap.getOrDefault(AwardTypeEnum.COIN.getCode(), 0);
-        String logInfo = String.format("%s：本周总计阅读%d天，共%d分钟，此次兑换%d天体验卡，%d个书币", wrName, awardRes.getReadingDay(), awardRes.getReadingTime(), card, coin);
+        String logInfo = String.format("【时长兑福利】%s：本周总计阅读%d天，共%d分钟，此次兑换%d天体验卡，%d个书币", wrName, awardRes.getReadingDay(), awardRes.getReadingTime(), card, coin);
         log.info(logInfo);
         return logInfo;
     }
@@ -108,7 +108,7 @@ public class Exchange {
             req = ExchangeAwardReq.init(platForm);
         }
         HttpResponse response = HttpRequest.post(Constant.EXCHANGE_URL)
-                .headerMap(exchangeHeader.toMap(), true)
+                .headerMap(androidHeader.toMap(), true)
                 .body(JSONObject.toJSONString(req))
                 .execute();
         return JSONObject.parseObject(response.body(), ExchangeAwardRes.class);
