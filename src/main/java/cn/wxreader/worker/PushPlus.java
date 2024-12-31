@@ -3,6 +3,9 @@ package cn.wxreader.worker;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import cn.wxreader.domain.PushPlusMsg;
+import cn.wxreader.enums.WxTaskEnum;
+import com.alibaba.fastjson.JSONObject;
 
 public class PushPlus {
     private String pushToken;
@@ -15,11 +18,15 @@ public class PushPlus {
         this.pushMsg = pushMsg;
     }
 
-    public Boolean push() {
+    public Boolean push(WxTaskEnum task) {
+        PushPlusMsg pushPlusMsg = new PushPlusMsg();
+        pushPlusMsg.setToken(pushToken);
+        pushPlusMsg.setContent(pushMsg);
+        pushPlusMsg.setTitle(task.getDesc());
         try {
             HttpResponse response = HttpRequest.post(pushPlusUrl)
                     .header(Header.USER_AGENT, userAgent)
-                    .body(String.format("{\"token\": \"%s\", \"content\": \"%s\"}", pushToken, pushMsg))
+                    .body(JSONObject.toJSONString(pushPlusMsg))
                     .execute();
             if (response.isOk()){
                 return true;

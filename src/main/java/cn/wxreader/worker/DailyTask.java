@@ -9,6 +9,10 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +37,26 @@ public class DailyTask {
         if (refreshToken.refreshCookie(wxReaderHeader)) {
             this.androidHeader = new AndroidHeader(wxReaderHeader, userAgent);
             dailyTaskMessage.setFriendLikeName(friendLike());
+            dailyTaskMessage.setLastReadDate(getLastReadDate());
         }
         return dailyTaskMessage.formatMsg(wrName);
     }
+
+    private LocalDate getLastReadDate() {
+        HttpResponse response = HttpRequest.get(Constant.READ_DATA_DETAIL_URL)
+                .headerMap(androidHeader.toMap(), true)
+                .execute();
+        ReadDataDetailRes readDataDetailRes = JSONObject.parseObject(response.body(), ReadDataDetailRes.class);
+        if (readDataDetailRes.getReadTimes().isEmpty()) {
+            log.warn("【每日任务】{}: 本周暂无阅读记录，无法获取上次阅读时间", wrName);
+            return null;
+        }
+        Integer lastReadTimestamp = Integer.valueOf(Collections.max(readDataDetailRes.getReadTimes().keySet()));
+        return Instant.ofEpochSecond(lastReadTimestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
     private String friendLike() {
         HttpResponse response = HttpRequest.get(String.format(Constant.FRIEND_RANKING_URL, System.currentTimeMillis()))
                 .headerMap(androidHeader.toMap(), true)

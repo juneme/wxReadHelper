@@ -27,15 +27,15 @@ public class Push {
         Boolean pushRes = false;
         switch (pushType) {
             case PUSH_PLUS:
-                pushRes = new PushPlus(pushToken, pushMsg).push();
+                pushRes = new PushPlus(pushToken, pushMsg).push(task);
                 break;
             default:
                 break;
         }
         if (pushRes) {
-            log.info("{}：已通过 {} 推送今日【{}】结果。", wrName, pushType.getDesc(), task.getDesc());
+            log.info("{}：已通过 {} 推送今日【{}】结果，推送消息内容：{}。", wrName, pushType.getDesc(), task.getDesc(), pushMsg);
         } else {
-            log.error("{}：通过 {} 推送今日【{}】结果失败。", wrName, pushType.getDesc(), task.getDesc());
+            log.error("{}：通过 {} 推送今日【{}】结果失败，推送消息内容：{}。", wrName, pushType.getDesc(), task.getDesc(), pushMsg);
         }
     }
 }

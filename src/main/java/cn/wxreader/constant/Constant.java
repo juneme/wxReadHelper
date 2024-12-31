@@ -11,6 +11,7 @@ public class Constant {
 
     public static String FRIEND_RANKING_URL = "https://i.weread.qq.com/friend/ranking?synckey=%s&mine=0";
     public static String FRIEND_LIKE_URL = "https://i.weread.qq.com/friend/like";
+    public static String READ_DATA_DETAIL_URL = "https://i.weread.qq.com/readdata/detail?mode=weekly&baseTime=0&defaultPreferBook=0";
     public static String IOS_PLATFORM = "weread_wx-2001-iap-2001-iphone";
     public static String Android_PLATFORM = "wechat_wx-2001-android-100-weread";
     public static String REFRESH_BODY = "{\"rq\":\"%2Fweb%2Fbook%2Fread\"}";
