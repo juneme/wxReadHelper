@@ -2,7 +2,6 @@ package cn.wxreader.worker;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import cn.wxreader.WxReadDailyTask;
 import cn.wxreader.constant.Constant;
 import cn.wxreader.domain.*;
 import com.alibaba.fastjson.JSONObject;
@@ -36,7 +35,7 @@ public class DailyTask {
         DailyTaskMessage dailyTaskMessage = new DailyTaskMessage();
         if (refreshToken.refreshCookie(wxReaderHeader)) {
             this.androidHeader = new AndroidHeader(wxReaderHeader, userAgent);
-            dailyTaskMessage.setFriendLikeName(friendLike());
+            dailyTaskMessage.setFriendLikeRes(friendLike());
             dailyTaskMessage.setLastReadDate(getLastReadDate());
         }
         return dailyTaskMessage.formatMsg(wrName);
@@ -71,13 +70,11 @@ public class DailyTask {
             return null;
         }
         List<Rank> unLikedFriends = friendRankList.stream().filter(f -> f.getIsLiked() == 0).collect(Collectors.toList());
-        Rank toLikeFriend = unLikedFriends.isEmpty() ? friendRankList.get(0) : unLikedFriends.get(0);
-        if (toLikeFriend.getIsLiked() == 1) {
-            log.info("【每日任务】{}: 已对好友【{}】进行过点赞，将取消后重新点赞", wrName, toLikeFriend.getUser().getName());
-            if (!sendLike(new FriendLikeReq(0, 0, toLikeFriend.getUser().getUserVid()))) {
-                return null;
-            }
+        if (unLikedFriends.isEmpty()) {
+            log.warn("【每日任务】{}: 本周好友已全部点赞，无需再次点赞", wrName);
+            return null;
         }
+        Rank toLikeFriend = unLikedFriends.get(0);
         if (!sendLike(new FriendLikeReq(1, 0, toLikeFriend.getUser().getUserVid()))) {
             return null;
         }

@@ -4,16 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class DailyTaskMessage {
-    private String friendLikeName;
+    private String friendLikeRes;
     private LocalDateTime loginTime;
     private LocalDate lastReadDate;
 
-    public String getFriendLikeName() {
-        return friendLikeName;
+    public String getFriendLikeRes() {
+        return friendLikeRes;
     }
 
-    public void setFriendLikeName(String friendLikeName) {
-        this.friendLikeName = friendLikeName;
+    public void setFriendLikeRes(String friendLikeRes) {
+        this.friendLikeRes = friendLikeRes;
     }
 
     public LocalDate getLastReadDate() {
@@ -30,8 +30,8 @@ public class DailyTaskMessage {
     public String formatMsg(String wrName) {
         StringBuilder strb = new StringBuilder();
         strb.append("【每日任务】").append(wrName);
-        if (friendLikeName != null) {
-            strb.append("，已完成互动评论，今日点赞好友：【").append(friendLikeName).append("】");
+        if (friendLikeRes != null) {
+            strb.append("，已完成互动评论，今日点赞好友：【").append(friendLikeRes).append("】");
         }
         if (loginTime != null) {
             strb.append("，已完成每日登录，今日首次登录时间：【").append(loginTime).append("】");
@@ -43,7 +43,7 @@ public class DailyTaskMessage {
                 strb.append("，今日未完成阅读，最后阅读日期：【").append(lastReadDate).append("】");
             }
         }
-        if (friendLikeName == null && loginTime == null && lastReadDate == null) {
+        if (friendLikeRes == null && loginTime == null && lastReadDate == null) {
             strb.append("，今日未执行任何任务，请查看相关日志");
         }
         return strb.toString();
